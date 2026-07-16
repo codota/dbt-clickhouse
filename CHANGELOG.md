@@ -1,4 +1,10 @@
-### Release [1.9.9], 2026-XX-XX
+### Release [1.9.8-codota.1], 2026-07-27
+
+Codota fork release: v1.9.8 plus the fix below, pending upstream review.
+
+#### Bugs
+* Replacing an existing view no longer fails with `UNSUPPORTED_METHOD` on filesystems without `renameat2(RENAME_EXCHANGE)` support (NFS, EFS, and others). ClickHouse implements `CREATE OR REPLACE VIEW` over an existing view with that syscall; when the server reports that atomic exchange is unsupported, the view materialization now falls back to a non-atomic `DROP` + `CREATE`, mirroring the existing fallback for table materializations ([#340](https://github.com/ClickHouse/dbt-clickhouse/issues/340)).
+
 
 
 ### Release [1.9.8], 2026-01-12
