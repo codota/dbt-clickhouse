@@ -9,6 +9,7 @@
 
 #### Bugs
 * Fix the `insert_overwrite` incremental strategy failing on ClickHouse 26.6+ with `Code: 36 ... refusing REPLACE PARTITION because it would silently drop the destination partition's data`. The strategy intentionally replaces partitions from a source table that may have no parts for a partition (to clear shards that received no new data on distributed tables), which newer servers reject by default. The `REPLACE PARTITION` statement now includes `allow_replace_partition_from_empty_source=1` on servers 26.6 and newer; older servers keep their existing behavior.
+* Replacing an existing view no longer fails with `UNSUPPORTED_METHOD` on filesystems without `renameat2(RENAME_EXCHANGE)` support (NFS, EFS, and others). ClickHouse implements `CREATE OR REPLACE VIEW` over an existing view with that syscall; when the server reports that atomic exchange is unsupported, the view materialization now falls back to a non-atomic `DROP` + `CREATE`, mirroring the existing fallback for table materializations ([#340](https://github.com/ClickHouse/dbt-clickhouse/issues/340)).
 
 
 ### Release [1.10.1], 2026-06-16
