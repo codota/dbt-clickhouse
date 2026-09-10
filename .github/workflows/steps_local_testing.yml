@@ -14,14 +14,14 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   test:
     name: Python ${{ inputs.python-version }} | Clickhouse ${{ inputs.clickhouse-version }} | Ubuntu
-    runs-on: ubuntu-stepsecurity-x64
+    runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
       TEST_SETTINGS_FILE: latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        uses: actions/checkout@v4
 
       - name: Set environment variables
         run: |
@@ -38,7 +38,7 @@ jobs:
           fi
 
       - name: Set up Docker Compose
-        uses: docker/setup-compose-action@4eb059ff7f16592f9c84d5ca339c53cb7c5064e2 # v2.3.0
+        uses: docker/setup-compose-action@v2
         with:
           version: v2.36.0
 
@@ -48,7 +48,7 @@ jobs:
         run: REPLICA_NUM=1 docker compose -f ${{ github.workspace }}/tests/integration/docker-compose.yml up -d
 
       - name: Setup Python ${{ inputs.python-version }}
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
 
